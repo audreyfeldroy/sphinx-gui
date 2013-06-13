@@ -10,7 +10,10 @@ class MainWindow(QtGui.QMainWindow):
         treeview =  QtGui.QTreeView()
         editor = Editor()
         self.setCentralWidget(splitter)
-
+        
+        # Small treeview, big editor
+        treeview.setMaximumWidth(250)
+        
         splitter.addWidget(treeview)
         splitter.addWidget(editor)
 
