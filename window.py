@@ -2,6 +2,7 @@ from PySide import QtGui, QtCore
 
 from editor import Editor
 from preview import Preview
+from tree import Tree
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -9,14 +10,10 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__(parent)
         
         splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
-        treeview =  QtGui.QTreeView()
+        treeview =  Tree()
         self.editor = Editor()
         self.preview = Preview()
-        self.setCentralWidget(splitter)
-        
-        # Small treeview, big editor
-        treeview.setMaximumWidth(250)
-        
+        self.setCentralWidget(splitter)        
         splitter.addWidget(treeview)
         splitter.addWidget(self.editor)
         splitter.addWidget(self.preview)
