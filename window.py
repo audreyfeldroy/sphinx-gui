@@ -1,14 +1,17 @@
 from PySide import QtGui, QtCore
 
 from editor import Editor
+from preview import Preview
 
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
+        
         splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
         treeview =  QtGui.QTreeView()
         self.editor = Editor()
+        self.preview = Preview()
         self.setCentralWidget(splitter)
         
         # Small treeview, big editor
@@ -16,6 +19,7 @@ class MainWindow(QtGui.QMainWindow):
         
         splitter.addWidget(treeview)
         splitter.addWidget(self.editor)
+        splitter.addWidget(self.preview)
 
         self.setWindowTitle("RST Previewer")
         self.showMaximized()
