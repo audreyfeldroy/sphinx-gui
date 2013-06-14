@@ -66,3 +66,11 @@ class MainWindow(QtGui.QMainWindow):
                 indexRoot = model.index(model.rootPath())
                 self.tree.setRootIndex(indexRoot)
                 
+                # Hide tree size and date columns
+                self.tree.hideColumn(1)
+                self.tree.hideColumn(2)
+                self.tree.hideColumn(3)
+                
+                # Hide tree header
+                self.tree.setHeaderHidden(True)
+                
