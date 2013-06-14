@@ -25,6 +25,12 @@ class Tree(QtGui.QTreeView):
 		# Set the tree's index to the root of the model
 		indexRoot = model.index(model.rootPath())
 		self.setRootIndex(indexRoot)
+
+		# Display tree cleanly
+		self.hide_unwanted_info()
+
+	def hide_unwanted_info(self):
+		""" Hides unneeded columns and header. """		
 		
 		# Hide tree size and date columns
 		self.hideColumn(1)
