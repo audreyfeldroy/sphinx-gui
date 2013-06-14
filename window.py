@@ -1,4 +1,5 @@
 from PySide import QtGui, QtCore
+from unipath import Path
 
 from editor import Editor
 from preview import Preview
@@ -10,11 +11,11 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__(parent)
         
         splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
-        treeview =  Tree()
+        self.tree =  Tree()
         self.editor = Editor()
         self.preview = Preview()
         self.setCentralWidget(splitter)        
-        splitter.addWidget(treeview)
+        splitter.addWidget(self.tree)
         splitter.addWidget(self.editor)
         splitter.addWidget(self.preview)
 
@@ -53,3 +54,15 @@ class MainWindow(QtGui.QMainWindow):
                     text = str(text)
     
                 self.editor.setPlainText(text)
+                
+                # Link the tree to a model
+                model = QtGui.QFileSystemModel()
+                file_path = Path(path[0])
+                tree_dir = file_path.parent.absolute()
+                model.setRootPath(tree_dir)
+                self.tree.setModel(model)
+                
+                # Set the tree's index to the root of the model
+                indexRoot = model.index(model.rootPath())
+                self.tree.setRootIndex(indexRoot)
+                

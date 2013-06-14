@@ -7,9 +7,10 @@ class Tree(QtGui.QTreeView):
 		self.setMaximumWidth(250)
 
 		# Get something to show up in tree
-		self.pathRoot = QtCore.QDir.rootPath()		
-		self.model = QtGui.QFileSystemModel(self)
-		self.model.setRootPath(self.pathRoot)
-		self.setModel(self.model)
-		self.indexRoot = self.model.index(self.model.rootPath())
-		self.setRootIndex(self.indexRoot)
+		# self.pathRoot = QtCore.QDir.rootPath()		
+		# self.model = QtGui.QFileSystemModel(self)
+		# self.model.setRootPath(self.pathRoot)
+		# self.setModel(self.model)
+		# self.indexRoot = self.model.index(self.model.rootPath())
+		# self.setRootIndex(self.indexRoot)
+		
