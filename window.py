@@ -74,7 +74,9 @@ class MainWindow(QtGui.QMainWindow):
                 # Hide tree header
                 self.tree.setHeaderHidden(True)
                 
-                # Load corresponding HTML file
-                output_html_path = Path("testfiles/contributing.html").absolute()
+                # Load corresponding HTML file from pre-built Sphinx docs
+                file_stem = str(file_path.stem)
+                html_str = "_build/html/{0}.html".format(file_stem)
+                output_html_path = Path(file_path.parent, html_str).absolute()
                 self.preview.load_html(output_html_path)
                 
