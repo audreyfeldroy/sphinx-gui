@@ -55,24 +55,10 @@ class MainWindow(QtGui.QMainWindow):
     
                 self.editor.setPlainText(text)
                 
-                # Link the tree to a model
-                model = QtGui.QFileSystemModel()
+                # Load the directory containing the file into the tree.
                 file_path = Path(path[0])
                 tree_dir = file_path.parent.absolute()
-                model.setRootPath(tree_dir)
-                self.tree.setModel(model)
-                
-                # Set the tree's index to the root of the model
-                indexRoot = model.index(model.rootPath())
-                self.tree.setRootIndex(indexRoot)
-                
-                # Hide tree size and date columns
-                self.tree.hideColumn(1)
-                self.tree.hideColumn(2)
-                self.tree.hideColumn(3)
-                
-                # Hide tree header
-                self.tree.setHeaderHidden(True)
+                self.tree.load_from_path(tree_dir)
                 
                 # Load corresponding HTML file from pre-built Sphinx docs
                 file_stem = str(file_path.stem)
