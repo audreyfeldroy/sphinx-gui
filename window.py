@@ -87,8 +87,9 @@ class MainWindow(QtGui.QMainWindow):
     
     def openFolder(self, path=None):
         """ 
-            Ask the user to open a folder (directory) via the Open Folder dialog.
-            Then open it in the tree, editor, and HTML preview windows.
+            Ask the user to open a folder (directory) via 
+            the Open Folder dialog. Then open it in the tree, 
+            editor, and HTML preview windows.
         """
         if not path:
             dialog = OpenDialog()
@@ -96,9 +97,11 @@ class MainWindow(QtGui.QMainWindow):
             path = dialog.getExistingDirectory(self, "Open Folder", '')
         
         if path:                
-            # Load the directory containing the file into the tree.
+            # Load the folder into the tree.
             self.tree.load_from_path(path)
             
-            # TODO: Load index.rst in the editor, or the first .rst file
+            # TODO: Load index.rst in the editor
+            #       or the first .rst file
             
-            # TODO: Load index.html in the preview pane, or the first .html file
+            # TODO: Load index.html in the preview pane
+            #       or the first .html file
