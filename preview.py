@@ -7,4 +7,7 @@ class Preview(QtWebKit.QWebView):
 		super(Preview, self).__init__(parent)
 		
 	def load_html(self, path):
+		"""
+			Load the specified HTML file into the preview pane.
+		"""
 		self.load(QtCore.QUrl.fromLocalFile(path))

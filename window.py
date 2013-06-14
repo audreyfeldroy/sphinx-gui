@@ -25,6 +25,9 @@ class MainWindow(QtGui.QMainWindow):
         self.setupActions()
 
     def setupActions(self):
+        """
+            Set up the top menu actions and keyboard shortcuts.
+        """
         self.fileMenu = self.menuBar().addMenu("&File")
         self.openAction = QtGui.QAction(
                                 QtGui.QIcon(":/images/open.png"), 
@@ -37,6 +40,10 @@ class MainWindow(QtGui.QMainWindow):
         self.fileMenu.addAction(self.openAction)
 
     def openFile(self, path=None):
+        """ 
+            Ask the user to open a file via the Open File dialog.
+            Then open it in the tree, editor, and HTML preview windows.
+        """
         if not path:
             path = QtGui.QFileDialog.getOpenFileName(self, "Open File",
                     '', "ReStructuredText Files (*.rst)")
