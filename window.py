@@ -1,6 +1,7 @@
 from PySide import QtGui, QtCore
 from unipath import Path
 
+from dialogs import OpenDialog
 from editor import Editor
 from preview import Preview
 from tree import Tree
@@ -29,15 +30,26 @@ class MainWindow(QtGui.QMainWindow):
             Set up the top menu actions and keyboard shortcuts.
         """
         self.fileMenu = self.menuBar().addMenu("&File")
+
         self.openAction = QtGui.QAction(
                                 QtGui.QIcon(":/images/open.png"), 
-                                "&Open", 
+                                "&Open File", 
                                 self, 
                                 shortcut="Ctrl+O",
                                 statusTip="Open File", 
                                 triggered=self.openFile
                             )
         self.fileMenu.addAction(self.openAction)
+
+        self.openFolderAction = QtGui.QAction(
+                                QtGui.QIcon(":/images/open.png"), 
+                                "Open &Folder", 
+                                self, 
+                                shortcut="Ctrl+F",
+                                statusTip="Open Folder", 
+                                triggered=self.openFolder
+                            )
+        self.fileMenu.addAction(self.openFolderAction)
 
     def openFile(self, path=None):
         """ 
@@ -72,4 +84,21 @@ class MainWindow(QtGui.QMainWindow):
                 html_str = "_build/html/{0}.html".format(file_stem)
                 output_html_path = Path(file_path.parent, html_str).absolute()
                 self.preview.load_html(output_html_path)
-                
+    
+    def openFolder(self, path=None):
+        """ 
+            Ask the user to open a folder (directory) via the Open Folder dialog.
+            Then open it in the tree, editor, and HTML preview windows.
+        """
+        if not path:
+            dialog = OpenDialog()
+            dialog.set_folders_only(True)
+            path = dialog.getExistingDirectory(self, "Open Folder", '')
+        
+        if path:                
+            # Load the directory containing the file into the tree.
+            self.tree.load_from_path(path)
+            
+            # TODO: Load index.rst in the editor, or the first .rst file
+            
+            # TODO: Load index.html in the preview pane, or the first .html file
