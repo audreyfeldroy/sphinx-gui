@@ -74,3 +74,7 @@ class MainWindow(QtGui.QMainWindow):
                 # Hide tree header
                 self.tree.setHeaderHidden(True)
                 
+                # Load corresponding HTML file
+                output_html_path = Path("testfiles/contributing.html").absolute()
+                self.preview.load_html(output_html_path)
+                
