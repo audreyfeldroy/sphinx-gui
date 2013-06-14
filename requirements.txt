@@ -1,0 +1,4 @@
+# Note: I installed this systemwide because PySide is hard to install in a virtualenv
+Unipath==1.0
+docutils==0.10
+PySide==1.1.2
