@@ -3,7 +3,7 @@ from PySide import QtGui, QtCore
 
 class OpenDialog(QtGui.QFileDialog):
 	def __init__(self, parent=None):
-		super (OpenDialog, self).__init__()
+		super(OpenDialog, self).__init__()
 
 	def set_folders_only(self, is_folders_only):
 		if is_folders_only:

@@ -57,7 +57,9 @@ class MainWindow(QtGui.QMainWindow):
             Then open it in the tree, editor, and HTML preview windows.
         """
         if not path:
-            path = QtGui.QFileDialog.getOpenFileName(self, "Open File",
+            dialog = OpenDialog()
+            dialog.set_folders_only(False)
+            path = dialog.getOpenFileName(self, "Open File",
                     '', "ReStructuredText Files (*.rst)")
     
         if path:
