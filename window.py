@@ -132,14 +132,10 @@ class MainWindow(QtGui.QMainWindow):
             try:
                 f = open(self.file_path.absolute(), "wb")
                 f.write(text)
+                f.close()
+                self.rebuildHTML()
             except IOError:
                 QMessageBox.information(self, "Unable to open file: %s" % self.file_path.absolute())
-                
-            # TODO: refactor this
-            os.chdir("/Users/audreyr/code/django-admin2/docs/")
-            proc = subprocess.Popen(["make", "html"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            proc.wait()
-
                 
     def saveFileAs(self):
         filename, _ = QtGui.QFileDialog.getSaveFileName(self, 'Save File As',
@@ -149,6 +145,8 @@ class MainWindow(QtGui.QMainWindow):
             try:
                 f = open(filename, "wb")
                 f.write(text)
+                f.close()
+                self.rebuildHTML()
             except IOError:
                 QMessageBox.information(self, "Unable to open file: %s" % filename)
     
@@ -188,3 +186,18 @@ class MainWindow(QtGui.QMainWindow):
         html_str = "_build/html/{0}.html".format(file_stem)
         output_html_path = Path(dir, html_str).absolute()
         self.preview.load_html(output_html_path)
+        
+    def rebuildHTML(self):
+        # TODO: refactor this
+        # os.chdir("/Users/audreyr/code/django-admin2/docs/")
+        os.chdir(self.file_path.parent)
+        proc = subprocess.Popen(["make", "clean"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        for line in proc.stdout:
+            print("stdout: " + line.rstrip())
+        print('----------------')
+        proc = subprocess.Popen(["make", "html"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc.wait()
+        for line in proc.stdout:
+            print("stdout: " + line.rstrip())
+        
+        
