@@ -73,24 +73,10 @@ class MainWindow(QtGui.QMainWindow):
                     '', "ReStructuredText Files (*.rst)")
     
         if path:
-            inFile = QtCore.QFile(path[0])
-            if inFile.open(QtCore.QFile.ReadOnly | QtCore.QFile.Text):
-                text = inFile.readAll()
-    
-                try:
-                    # Python v3.
-                    text = str(text, encoding='ascii')
-                except TypeError:
-                    # Python v2.
-                    text = str(text)
-    
-                self.editor.setPlainText(text)
-                
-
-                file_path = Path(path[0])
-                filename = file_path.name
-                tree_dir = file_path.parent.absolute()
-                self.handleFileChanged(tree_dir, filename)
+            file_path = Path(path[0])
+            filename = file_path.name
+            tree_dir = file_path.parent.absolute()
+            self.handleFileChanged(tree_dir, filename)
     
     def openFolder(self, path=None):
         """ 
@@ -104,11 +90,6 @@ class MainWindow(QtGui.QMainWindow):
             path = dialog.getExistingDirectory(self, "Open Folder", '')
         
         if path:                
-            # Load the folder into the tree.
-            self.tree.load_from_path(path)
-            
-            # TODO: Load index.rst in the editor
-            #       or the first .rst file
             self.handleFileChanged(path)
 
     def handleFileChanged(self, dir, filename=None):
@@ -122,6 +103,9 @@ class MainWindow(QtGui.QMainWindow):
             filename = "index.rst"
 
         file_path = Path(dir, filename)
+        
+        # Load the file into the editor
+        self.editor.open_file(file_path)
         
         # Load the directory containing the file into the tree.
         self.tree.load_from_path(dir)
