@@ -70,7 +70,7 @@ class MainWindow(QtGui.QMainWindow):
             dialog = OpenDialog()
             dialog.set_folders_only(False)
             path = dialog.getOpenFileName(self, "Open File",
-                    '', "ReStructuredText Files (*.rst)")
+                    '', "ReStructuredText Files (*.rst *.txt)")
     
         if path:
             file_path = Path(path[0])
