@@ -44,9 +44,9 @@ class MainWindow(QtGui.QMainWindow):
 
         self.openFolderAction = QtGui.QAction(
                                     QtGui.QIcon(":/images/open.png"), 
-                                    "Open &Folder", 
+                                    "Open Folder", 
                                     self, 
-                                    shortcut="Ctrl+F",
+                                    shortcut="Ctrl+Shift+O",
                                     statusTip="Open Folder", 
                                     triggered=self.openFolder
                                 )
@@ -65,7 +65,7 @@ class MainWindow(QtGui.QMainWindow):
 
         self.saveAsAction = QtGui.QAction(
                                 QtGui.QIcon(":/images/save.png"), 
-                                "&Save As File", 
+                                "Save As File", 
                                 self, 
                                 shortcut="Ctrl+Shift+S",
                                 statusTip="Save File As...", 
