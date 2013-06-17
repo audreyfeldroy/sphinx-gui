@@ -1,3 +1,5 @@
+import os
+import subprocess
 import sys
 
 from PySide import QtGui, QtCore
@@ -19,7 +21,6 @@ class MainWindow(QtGui.QMainWindow):
             super(MainWindow, self).__init__(parent, QtCore.Qt.MacWindowToolBarButtonHint)
         else:
             super(MainWindow, self).__init__(parent)
-
         
     def setup_app(self):   
         self.setupActions()
@@ -37,7 +38,6 @@ class MainWindow(QtGui.QMainWindow):
         self.createToolBars()
         self.showMaximized()
         
-
     def setupActions(self):
         """
             Set up the top menu actions and keyboard shortcuts.
@@ -134,6 +134,12 @@ class MainWindow(QtGui.QMainWindow):
                 f.write(text)
             except IOError:
                 QMessageBox.information(self, "Unable to open file: %s" % self.file_path.absolute())
+                
+            # TODO: refactor this
+            os.chdir("/Users/audreyr/code/django-admin2/docs/")
+            proc = subprocess.Popen(["make", "html"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            proc.wait()
+
                 
     def saveFileAs(self):
         filename, _ = QtGui.QFileDialog.getSaveFileName(self, 'Save File As',
