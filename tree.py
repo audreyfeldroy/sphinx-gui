@@ -8,6 +8,9 @@ class Tree(QtGui.QTreeView):
 	def load_from_path(self, path):
 		""" Load directory containing file into the tree. """
 		
+		# Store the path info
+		self.path = path
+		
 		# Link the tree to a model
 		model = QtGui.QFileSystemModel()
 		model.setRootPath(path)
@@ -38,6 +41,8 @@ class Tree(QtGui.QTreeView):
 	def selectionChanged(self, selected, deselected):
 		""" 
 			Event handler for selection changes.
+			
+			Triggers a fileChanged event in parent window.
 		"""
 		print "In selectionChanged"
 		indexes = selected.indexes()
@@ -45,3 +50,4 @@ class Tree(QtGui.QTreeView):
 			print('row: %d' % indexes[0].row())
 			# print selected.value(indexes[0].row())
 			print self.model().data(indexes[0])
+			

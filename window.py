@@ -91,11 +91,7 @@ class MainWindow(QtGui.QMainWindow):
                 tree_dir = file_path.parent.absolute()
                 self.tree.load_from_path(tree_dir)
                 
-                # Load corresponding HTML file from pre-built Sphinx docs
-                file_stem = str(file_path.stem)
-                html_str = "_build/html/{0}.html".format(file_stem)
-                output_html_path = Path(file_path.parent, html_str).absolute()
-                self.preview.load_html(output_html_path)
+                self.handleFileChanged(tree_dir, file_path)
     
     def openFolder(self, path=None):
         """ 
@@ -117,3 +113,15 @@ class MainWindow(QtGui.QMainWindow):
             
             # TODO: Load index.html in the preview pane
             #       or the first .html file
+
+    def handleFileChanged(self, dir, filename):
+        """
+            This is called whenever the active file is changed.
+            
+            It sets the editor and preview panes to the new file.
+        """
+        # Load corresponding HTML file from pre-built Sphinx docs
+        file_stem = str(filename.stem)
+        html_str = "_build/html/{0}.html".format(file_stem)
+        output_html_path = Path(dir, html_str).absolute()
+        self.preview.load_html(output_html_path)
