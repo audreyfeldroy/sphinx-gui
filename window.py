@@ -51,6 +51,17 @@ class MainWindow(QtGui.QMainWindow):
                                 )
         self.fileMenu.addAction(self.openFolderAction)
         
+
+        self.saveAction = QtGui.QAction(
+                                QtGui.QIcon(":/images/save.png"), 
+                                "&Save File", 
+                                self, 
+                                shortcut="Ctrl+S",
+                                statusTip="Save File", 
+                                triggered=self.saveFile
+                            )
+        self.fileMenu.addAction(self.saveAction)
+        
         self.quitAction = QtGui.QAction(
                             QtGui.QIcon(':/images/save.png'), 
                             "&Quit RST Previewer", 
@@ -77,6 +88,17 @@ class MainWindow(QtGui.QMainWindow):
             filename = file_path.name
             tree_dir = file_path.parent.absolute()
             self.handleFileChanged(tree_dir, filename)
+
+    def saveFile(self):
+        filename, _ = QtGui.QFileDialog.getSaveFileName(self, 'Save file',
+                                '', "ReStructuredText Files (*.rst *.txt)")
+        if filename:
+            text = self.editor.toPlainText()
+            try:
+                f = open(filename, "wb")
+                f.write(text)
+            except IOError:
+                QMessageBox.information(self, "Unable to open file: %s" % filename)
     
     def openFolder(self, path=None):
         """ 
