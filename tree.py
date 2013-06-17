@@ -19,6 +19,10 @@ class Tree(QtGui.QTreeView):
 
 		# Display tree cleanly
 		self.hide_unwanted_info()
+		
+		# Connect the selection changed signal
+		# selmodel = self.listing.selectionModel()
+		# self.selectionChanged.connect(self.handleSelectionChanged)
 
 	def hide_unwanted_info(self):
 		""" Hides unneeded columns and header. """		
@@ -30,3 +34,14 @@ class Tree(QtGui.QTreeView):
 		
 		# Hide tree header
 		self.setHeaderHidden(True)
+
+	def selectionChanged(self, selected, deselected):
+		""" 
+			Event handler for selection changes.
+		"""
+		print "In selectionChanged"
+		indexes = selected.indexes()
+		if indexes:
+			print('row: %d' % indexes[0].row())
+			# print selected.value(indexes[0].row())
+			print self.model().data(indexes[0])
