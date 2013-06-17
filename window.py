@@ -1,3 +1,5 @@
+import sys
+
 from PySide import QtGui, QtCore
 from unipath import Path
 
@@ -9,8 +11,18 @@ from tree import Tree
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self, parent=None):
-        super(MainWindow, self).__init__(parent)
+        # super(MainWindow, self).__init__(parent)
+        if sys.platform == 'darwin':
+            # Workaround for Qt issue on OS X that causes QMainWindow to
+            # hide when adding QToolBar, see
+            # https://bugreports.qt-project.org/browse/QTBUG-4300
+            super(MainWindow, self).__init__(parent, QtCore.Qt.MacWindowToolBarButtonHint)
+        else:
+            super(MainWindow, self).__init__(parent)
+
         
+    def setup_app(self):   
+        self.setupActions()
         splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
         self.tree =  Tree()
         self.editor = Editor()
@@ -20,69 +32,83 @@ class MainWindow(QtGui.QMainWindow):
         splitter.addWidget(self.tree)
         splitter.addWidget(self.editor)
         splitter.addWidget(self.preview)
-
-        self.setWindowTitle("RST Previewer")
+        self.setWindowTitle("RST Previewer")        
+        self.createMenus()
+        self.createToolBars()
         self.showMaximized()
         
-        self.setupActions()
 
     def setupActions(self):
         """
             Set up the top menu actions and keyboard shortcuts.
         """
-        self.fileMenu = self.menuBar().addMenu("&File")
+
 
         self.openAction = QtGui.QAction(
-                                QtGui.QIcon(":/images/open.png"), 
+                                # QtGui.QIcon(":/images/open.png"), 
                                 "&Open File", 
                                 self, 
                                 shortcut="Ctrl+O",
                                 statusTip="Open File", 
                                 triggered=self.openFile
                             )
-        self.fileMenu.addAction(self.openAction)
+
+
 
         self.openFolderAction = QtGui.QAction(
-                                    QtGui.QIcon(":/images/open.png"), 
+                                    # QtGui.QIcon(":/images/open.png"), 
                                     "Open Folder", 
                                     self, 
                                     shortcut="Ctrl+Shift+O",
                                     statusTip="Open Folder", 
                                     triggered=self.openFolder
                                 )
-        self.fileMenu.addAction(self.openFolderAction)
         
 
         self.saveAction = QtGui.QAction(
-                                QtGui.QIcon(":/images/save.png"), 
+                                # QtGui.QIcon(":/images/save.png"), 
                                 "&Save File", 
                                 self, 
                                 shortcut="Ctrl+S",
                                 statusTip="Save File", 
                                 triggered=self.saveFile
                             )
-        self.fileMenu.addAction(self.saveAction)
+
 
         self.saveAsAction = QtGui.QAction(
-                                QtGui.QIcon(":/images/save.png"), 
+                                # QtGui.QIcon(":/images/save.png"), 
                                 "Save As File", 
                                 self, 
                                 shortcut="Ctrl+Shift+S",
                                 statusTip="Save File As...", 
                                 triggered=self.saveFileAs
                             )
-        self.fileMenu.addAction(self.saveAsAction)
         
         self.quitAction = QtGui.QAction(
-                            QtGui.QIcon(':/images/save.png'), 
+                            # QtGui.QIcon(':/images/save.png'), 
                             "&Quit RST Previewer", 
                             self,
                             shortcut="Ctrl+Q",
                             statusTip="Quit RST Previewer",
                             triggered=self.close
-                        )        
-        self.fileMenu.addAction(self.quitAction)
+                        )   
 
+    def createMenus(self):
+        self.fileMenu = self.menuBar().addMenu("&File")
+        self.fileMenu.addAction(self.openAction)
+        self.fileMenu.addAction(self.openFolderAction)
+        self.fileMenu.addAction(self.saveAction)
+        self.fileMenu.addAction(self.saveAsAction)
+        self.fileMenu.addAction(self.quitAction)
+        
+    def createToolBars(self):
+        self.fileToolBar = self.addToolBar("File")
+        self.fileToolBar.addAction(self.openAction)
+        self.fileToolBar.addAction(self.openFolderAction)
+        self.fileToolBar.addAction(self.saveAction)
+        self.fileToolBar.addAction(self.saveAsAction)
+        self.fileToolBar.addAction(self.quitAction)
+        
     def openFile(self, path=None):
         """ 
             Ask the user to open a file via the Open File dialog.
