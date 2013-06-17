@@ -4,16 +4,21 @@ from PySide import QtGui, QtCore
 class Tree(QtGui.QTreeView):
 	def __init__(self, parent=None):
 		super(Tree, self).__init__(parent)
+		self.dir_path = None
 
-	def load_from_path(self, path):
+	def load_from_dir(self, dir_path):
 		""" Load directory containing file into the tree. """
 		
+		# If it's the same dir as before, return to avoid redrawing
+		if dir_path == self.dir_path:
+			return
+		
 		# Store the path info
-		self.path = path
+		self.dir_path = dir_path
 		
 		# Link the tree to a model
 		model = QtGui.QFileSystemModel()
-		model.setRootPath(path)
+		model.setRootPath(dir_path)
 		self.setModel(model)
 		
 		# Set the tree's index to the root of the model
@@ -23,10 +28,6 @@ class Tree(QtGui.QTreeView):
 		# Display tree cleanly
 		self.hide_unwanted_info()
 		
-		# Connect the selection changed signal
-		# selmodel = self.listing.selectionModel()
-		# self.selectionChanged.connect(self.handleSelectionChanged)
-
 	def hide_unwanted_info(self):
 		""" Hides unneeded columns and header. """		
 		
@@ -44,10 +45,11 @@ class Tree(QtGui.QTreeView):
 			
 			Triggers a fileChanged event in parent window.
 		"""
-		print "In selectionChanged"
+		super(Tree, self).selectionChanged(selected, deselected)
 		indexes = selected.indexes()
 		if indexes:
-			print('row: %d' % indexes[0].row())
-			# print selected.value(indexes[0].row())
-			print self.model().data(indexes[0])
+			# Handle fileChanged event in main window
+			new_filename = self.model().data(indexes[0])
+			main_win = self.parent().parent()
+			main_win.handleFileChanged(self.dir_path, new_filename)
 			

@@ -95,7 +95,6 @@ class MainWindow(QtGui.QMainWindow):
     def handleFileChanged(self, dir, filename=None):
         """
             This is called whenever the active file is changed.
-            
             It sets the tree, editor, and preview panes to the new file.
         """
         if not filename:
@@ -108,7 +107,7 @@ class MainWindow(QtGui.QMainWindow):
         self.editor.open_file(file_path)
         
         # Load the directory containing the file into the tree.
-        self.tree.load_from_path(dir)
+        self.tree.load_from_dir(dir)
         
         # Load corresponding HTML file from pre-built Sphinx docs
         file_stem = str(file_path.stem)
