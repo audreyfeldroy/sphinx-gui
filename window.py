@@ -15,6 +15,7 @@ class MainWindow(QtGui.QMainWindow):
         self.tree =  Tree()
         self.editor = Editor()
         self.preview = Preview()
+        self.file_path = None
         self.setCentralWidget(splitter)        
         splitter.addWidget(self.tree)
         splitter.addWidget(self.editor)
@@ -61,6 +62,16 @@ class MainWindow(QtGui.QMainWindow):
                                 triggered=self.saveFile
                             )
         self.fileMenu.addAction(self.saveAction)
+
+        self.saveAsAction = QtGui.QAction(
+                                QtGui.QIcon(":/images/save.png"), 
+                                "&Save As File", 
+                                self, 
+                                shortcut="Ctrl+Shift+S",
+                                statusTip="Save File As...", 
+                                triggered=self.saveFileAs
+                            )
+        self.fileMenu.addAction(self.saveAsAction)
         
         self.quitAction = QtGui.QAction(
                             QtGui.QIcon(':/images/save.png'), 
@@ -90,7 +101,16 @@ class MainWindow(QtGui.QMainWindow):
             self.handleFileChanged(tree_dir, filename)
 
     def saveFile(self):
-        filename, _ = QtGui.QFileDialog.getSaveFileName(self, 'Save file',
+        if self.file_path:
+            text = self.editor.toPlainText()
+            try:
+                f = open(self.file_path.absolute(), "wb")
+                f.write(text)
+            except IOError:
+                QMessageBox.information(self, "Unable to open file: %s" % self.file_path.absolute())
+                
+    def saveFileAs(self):
+        filename, _ = QtGui.QFileDialog.getSaveFileName(self, 'Save File As',
                                 '', "ReStructuredText Files (*.rst *.txt)")
         if filename:
             text = self.editor.toPlainText()
@@ -122,17 +142,17 @@ class MainWindow(QtGui.QMainWindow):
         if not filename:
             # TODO: find first rst file if index.rst doesn't exist.
             filename = "index.rst"
-
-        file_path = Path(dir, filename)
+            
+        self.file_path = Path(dir, filename)
         
         # Load the file into the editor
-        self.editor.open_file(file_path)
+        self.editor.open_file(self.file_path)
         
         # Load the directory containing the file into the tree.
         self.tree.load_from_dir(dir)
         
         # Load corresponding HTML file from pre-built Sphinx docs
-        file_stem = str(file_path.stem)
+        file_stem = str(self.file_path.stem)
         html_str = "_build/html/{0}.html".format(file_stem)
         output_html_path = Path(dir, html_str).absolute()
         self.preview.load_html(output_html_path)
