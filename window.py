@@ -86,12 +86,10 @@ class MainWindow(QtGui.QMainWindow):
     
                 self.editor.setPlainText(text)
                 
-                # Load the directory containing the file into the tree.
+
                 file_path = Path(path[0])
                 filename = file_path.name
                 tree_dir = file_path.parent.absolute()
-                self.tree.load_from_path(tree_dir)
-                
                 self.handleFileChanged(tree_dir, filename)
     
     def openFolder(self, path=None):
@@ -111,21 +109,22 @@ class MainWindow(QtGui.QMainWindow):
             
             # TODO: Load index.rst in the editor
             #       or the first .rst file
-            
-            # TODO: Load index.html in the preview pane
-            #       or the first .html file
             self.handleFileChanged(path)
 
     def handleFileChanged(self, dir, filename=None):
         """
             This is called whenever the active file is changed.
             
-            It sets the editor and preview panes to the new file.
+            It sets the tree, editor, and preview panes to the new file.
         """
         if not filename:
+            # TODO: find first rst file if index.rst doesn't exist.
             filename = "index.rst"
 
         file_path = Path(dir, filename)
+        
+        # Load the directory containing the file into the tree.
+        self.tree.load_from_path(dir)
         
         # Load corresponding HTML file from pre-built Sphinx docs
         file_stem = str(file_path.stem)
