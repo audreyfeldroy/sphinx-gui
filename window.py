@@ -42,14 +42,24 @@ class MainWindow(QtGui.QMainWindow):
         self.fileMenu.addAction(self.openAction)
 
         self.openFolderAction = QtGui.QAction(
-                                QtGui.QIcon(":/images/open.png"), 
-                                "Open &Folder", 
-                                self, 
-                                shortcut="Ctrl+F",
-                                statusTip="Open Folder", 
-                                triggered=self.openFolder
-                            )
+                                    QtGui.QIcon(":/images/open.png"), 
+                                    "Open &Folder", 
+                                    self, 
+                                    shortcut="Ctrl+F",
+                                    statusTip="Open Folder", 
+                                    triggered=self.openFolder
+                                )
         self.fileMenu.addAction(self.openFolderAction)
+        
+        self.quitAction = QtGui.QAction(
+                            QtGui.QIcon(':/images/save.png'), 
+                            "&Quit RST Previewer", 
+                            self,
+                            shortcut="Ctrl+Q",
+                            statusTip="Quit RST Previewer",
+                            triggered=self.close
+                        )        
+        self.fileMenu.addAction(self.quitAction)
 
     def openFile(self, path=None):
         """ 
