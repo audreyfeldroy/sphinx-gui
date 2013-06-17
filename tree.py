@@ -5,6 +5,10 @@ class Tree(QtGui.QTreeView):
 	def __init__(self, parent=None):
 		super(Tree, self).__init__(parent)
 		self.dir_path = None
+		
+		# TODO: resize tree according to contents.
+		# For now, max width is hardcoded.
+		self.setMaximumWidth(180)
 
 	def load_from_dir(self, dir_path):
 		""" Load directory containing file into the tree. """
