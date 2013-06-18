@@ -29,6 +29,7 @@ class MainWindow(QtGui.QMainWindow):
         self.editor = Editor()
         self.preview = Preview()
         self.file_path = None
+        self.output_html_path = None
         self.setCentralWidget(splitter)        
         splitter.addWidget(self.tree)
         splitter.addWidget(self.editor)
@@ -43,7 +44,7 @@ class MainWindow(QtGui.QMainWindow):
             Set up the top menu actions and keyboard shortcuts.
         """
 
-
+        # File Menu --------------------------------------------------
         self.openAction = QtGui.QAction(
                                 # QtGui.QIcon(":/images/open.png"), 
                                 "&Open File", 
@@ -93,6 +94,16 @@ class MainWindow(QtGui.QMainWindow):
                             triggered=self.close
                         )   
 
+        # Build Menu --------------------------------------------------
+        
+        self.buildHTMLAction = QtGui.QAction(
+            "Build &HTML", 
+            self,
+            shortcut="Ctrl+B",
+            statusTip="Build HTML",
+            triggered=self.buildHTML
+        )   
+
     def createMenus(self):
         self.fileMenu = self.menuBar().addMenu("&File")
         self.fileMenu.addAction(self.openAction)
@@ -100,14 +111,18 @@ class MainWindow(QtGui.QMainWindow):
         self.fileMenu.addAction(self.saveAction)
         self.fileMenu.addAction(self.saveAsAction)
         self.fileMenu.addAction(self.quitAction)
+        self.buildMenu = self.menuBar().addMenu("&Build")
+        self.buildMenu.addAction(self.buildHTMLAction)
         
     def createToolBars(self):
         self.fileToolBar = self.addToolBar("File")
         self.fileToolBar.addAction(self.openAction)
         self.fileToolBar.addAction(self.openFolderAction)
         self.fileToolBar.addAction(self.saveAction)
-        self.fileToolBar.addAction(self.saveAsAction)
-        self.fileToolBar.addAction(self.quitAction)
+        # self.fileToolBar.addAction(self.saveAsAction)
+        # self.fileToolBar.addAction(self.quitAction)
+        self.buildToolBar = self.addToolBar("Build")
+        self.buildToolBar.addAction(self.buildHTMLAction)
         
     def openFile(self, path=None):
         """ 
@@ -133,7 +148,7 @@ class MainWindow(QtGui.QMainWindow):
                 f = open(self.file_path.absolute(), "wb")
                 f.write(text)
                 f.close()
-                self.rebuildHTML()
+                # self.rebuildHTML()
             except IOError:
                 QMessageBox.information(self, "Unable to open file: %s" % self.file_path.absolute())
                 
@@ -146,7 +161,7 @@ class MainWindow(QtGui.QMainWindow):
                 f = open(filename, "wb")
                 f.write(text)
                 f.close()
-                self.rebuildHTML()
+                # self.rebuildHTML()
             except IOError:
                 QMessageBox.information(self, "Unable to open file: %s" % filename)
     
@@ -174,6 +189,9 @@ class MainWindow(QtGui.QMainWindow):
             filename = "index.rst"
             
         self.file_path = Path(dir, filename)
+        file_stem = str(self.file_path.stem)
+        html_str = "_build/html/{0}.html".format(file_stem)
+        self.output_html_path = Path(dir, html_str).absolute()
         
         # Load the file into the editor
         self.editor.open_file(self.file_path)
@@ -182,14 +200,10 @@ class MainWindow(QtGui.QMainWindow):
         self.tree.load_from_dir(dir)
         
         # Load corresponding HTML file from pre-built Sphinx docs
-        file_stem = str(self.file_path.stem)
-        html_str = "_build/html/{0}.html".format(file_stem)
-        output_html_path = Path(dir, html_str).absolute()
-        self.preview.load_html(output_html_path)
+        self.preview.load_html(self.output_html_path)
         
-    def rebuildHTML(self):
-        # TODO: refactor this
-        # os.chdir("/Users/audreyr/code/django-admin2/docs/")
+    def buildHTML(self):
+        # TODO: make this configurable via a dialog
         os.chdir(self.file_path.parent)
         proc = subprocess.Popen(["make", "clean"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         for line in proc.stdout:
@@ -199,5 +213,6 @@ class MainWindow(QtGui.QMainWindow):
         proc.wait()
         for line in proc.stdout:
             print("stdout: " + line.rstrip())
-        
-        
+            
+        # Load corresponding HTML file from newly-built Sphinx docs
+        self.preview.load_html(self.output_html_path)
