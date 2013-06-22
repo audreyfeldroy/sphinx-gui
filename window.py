@@ -7,7 +7,7 @@ from unipath import Path
 
 from dialogs import OpenDialog
 from editor import Editor
-from preview import Preview
+from preview import Preview, PDFPane
 from tree import Tree
 
 
@@ -30,7 +30,9 @@ class MainWindow(QtGui.QMainWindow):
         
         self.tab_widget = QtGui.QTabWidget()
         self.preview = Preview()
-        self.tab_widget.addTab(self.preview, "HTML Preview")
+        self.pdf_pane = PDFPane()
+        self.tab_widget.addTab(self.preview, "HTML")
+        self.tab_widget.addTab(self.pdf_pane, "PDF")
         
         self.file_path = None
         self.output_html_path = None
