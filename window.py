@@ -27,13 +27,22 @@ class MainWindow(QtGui.QMainWindow):
         splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
         self.tree =  Tree()
         self.editor = Editor()
+        
+        self.tab_widget = QtGui.QTabWidget()
         self.preview = Preview()
+        self.tab_widget.addTab(self.preview, "HTML Preview")
+        
         self.file_path = None
         self.output_html_path = None
+        
         self.setCentralWidget(splitter)        
         splitter.addWidget(self.tree)
         splitter.addWidget(self.editor)
-        splitter.addWidget(self.preview)
+        
+        splitter.addWidget(self.tab_widget)
+        # splitter.addWidget(self.preview)
+        
+        
         self.setWindowTitle("RST Previewer")        
         self.createMenus()
         self.createToolBars()
