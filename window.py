@@ -104,6 +104,14 @@ class MainWindow(QtGui.QMainWindow):
             triggered=self.buildHTML
         )   
 
+        self.buildPDFAction = QtGui.QAction(
+            "Build &PDF", 
+            self,
+            shortcut="Ctrl+Shift+B",
+            statusTip="Build PDF",
+            triggered=self.buildPDF
+        )  
+
     def createMenus(self):
         self.fileMenu = self.menuBar().addMenu("&File")
         self.fileMenu.addAction(self.openAction)
@@ -113,6 +121,7 @@ class MainWindow(QtGui.QMainWindow):
         self.fileMenu.addAction(self.quitAction)
         self.buildMenu = self.menuBar().addMenu("&Build")
         self.buildMenu.addAction(self.buildHTMLAction)
+        self.buildMenu.addAction(self.buildPDFAction)
         
     def createToolBars(self):
         self.fileToolBar = self.addToolBar("File")
@@ -123,6 +132,7 @@ class MainWindow(QtGui.QMainWindow):
         # self.fileToolBar.addAction(self.quitAction)
         self.buildToolBar = self.addToolBar("Build")
         self.buildToolBar.addAction(self.buildHTMLAction)
+        self.buildToolBar.addAction(self.buildPDFAction)
         
     def openFile(self, path=None):
         """ 
@@ -203,6 +213,11 @@ class MainWindow(QtGui.QMainWindow):
         self.preview.load_html(self.output_html_path)
         
     def buildHTML(self):
+        """
+        Builds the .html version of the active file and reloads
+        it in the preview pane.
+        """
+        
         # TODO: make this configurable via a dialog
         os.chdir(self.file_path.parent)
         proc = subprocess.Popen(["make", "clean"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -216,3 +231,20 @@ class MainWindow(QtGui.QMainWindow):
             
         # Load corresponding HTML file from newly-built Sphinx docs
         self.preview.load_html(self.output_html_path)
+
+    def buildPDF(self):
+        """
+        Builds the .pdf version of the active file.
+        """
+        
+        # TODO: make this configurable via a dialog
+        os.chdir(self.file_path.parent)
+        proc = subprocess.Popen(["make", "clean"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        for line in proc.stdout:
+            print("stdout: " + line.rstrip())
+        print('----------------')
+        proc = subprocess.Popen(["make", "latexpdf"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc.wait()
+        for line in proc.stdout:
+            print("stdout: " + line.rstrip())
+            
