@@ -45,7 +45,7 @@ class MainWindow(QtGui.QMainWindow):
         # splitter.addWidget(self.preview)
 
 
-        self.setWindowTitle("RST Previewer")
+        self.setWindowTitle("Sphinx Docs Editor")
         self.createMenus()
         self.createToolBars()
         self.showMaximized()
@@ -98,10 +98,10 @@ class MainWindow(QtGui.QMainWindow):
 
         self.quitAction = QtGui.QAction(
                             # QtGui.QIcon(':/images/save.png'),
-                            "&Quit RST Previewer",
+                            "&Quit",
                             self,
                             shortcut="Ctrl+Q",
-                            statusTip="Quit RST Previewer",
+                            statusTip="Quit",
                             triggered=self.close
                         )
 
