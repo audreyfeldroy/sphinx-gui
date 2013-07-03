@@ -18,14 +18,15 @@ class MainWindow(QtGui.QMainWindow):
             # Workaround for Qt issue on OS X that causes QMainWindow to
             # hide when adding QToolBar, see
             # https://bugreports.qt-project.org/browse/QTBUG-4300
-            super(MainWindow, self).__init__(parent, QtCore.Qt.MacWindowToolBarButtonHint)
+            super(MainWindow, self).__init__(parent,
+                    QtCore.Qt.MacWindowToolBarButtonHint)
         else:
             super(MainWindow, self).__init__(parent)
 
     def setup_app(self):
         self.setupActions()
         splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
-        self.tree =  Tree()
+        self.tree = Tree()
         self.editor = Editor()
 
         self.tab_widget = QtGui.QTabWidget()
@@ -42,8 +43,6 @@ class MainWindow(QtGui.QMainWindow):
         splitter.addWidget(self.editor)
 
         splitter.addWidget(self.tab_widget)
-        # splitter.addWidget(self.preview)
-
 
         self.setWindowTitle("Sphinx Docs Editor")
         self.createMenus()
