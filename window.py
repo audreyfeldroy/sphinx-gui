@@ -18,8 +18,10 @@ class MainWindow(QtGui.QMainWindow):
             # Workaround for Qt issue on OS X that causes QMainWindow to
             # hide when adding QToolBar, see
             # https://bugreports.qt-project.org/browse/QTBUG-4300
-            super(MainWindow, self).__init__(parent,
-                    QtCore.Qt.MacWindowToolBarButtonHint)
+            super(MainWindow, self).__init__(
+                parent,
+                QtCore.Qt.MacWindowToolBarButtonHint
+            )
         else:
             super(MainWindow, self).__init__(parent)
 
@@ -56,53 +58,49 @@ class MainWindow(QtGui.QMainWindow):
 
         # File Menu --------------------------------------------------
         self.openAction = QtGui.QAction(
-                                # QtGui.QIcon(":/images/open.png"),
-                                "&Open File",
-                                self,
-                                shortcut="Ctrl+O",
-                                statusTip="Open File",
-                                triggered=self.openFile
-                            )
-
-
+            # QtGui.QIcon(":/images/open.png"),
+            "&Open File",
+            self,
+            shortcut="Ctrl+O",
+            statusTip="Open File",
+            triggered=self.openFile
+        )
 
         self.openFolderAction = QtGui.QAction(
-                                    # QtGui.QIcon(":/images/open.png"),
-                                    "Open Folder",
-                                    self,
-                                    shortcut="Ctrl+Shift+O",
-                                    statusTip="Open Folder",
-                                    triggered=self.openFolder
-                                )
-
+            # QtGui.QIcon(":/images/open.png"),
+            "Open Folder",
+            self,
+            shortcut="Ctrl+Shift+O",
+            statusTip="Open Folder",
+            triggered=self.openFolder
+        )
 
         self.saveAction = QtGui.QAction(
-                                # QtGui.QIcon(":/images/save.png"),
-                                "&Save File",
-                                self,
-                                shortcut="Ctrl+S",
-                                statusTip="Save File",
-                                triggered=self.saveFile
-                            )
-
+            # QtGui.QIcon(":/images/save.png"),
+            "&Save File",
+            self,
+            shortcut="Ctrl+S",
+            statusTip="Save File",
+            triggered=self.saveFile
+        )
 
         self.saveAsAction = QtGui.QAction(
-                                # QtGui.QIcon(":/images/save.png"),
-                                "Save As File",
-                                self,
-                                shortcut="Ctrl+Shift+S",
-                                statusTip="Save File As...",
-                                triggered=self.saveFileAs
-                            )
+            # QtGui.QIcon(":/images/save.png"),
+            "Save As File",
+            self,
+            shortcut="Ctrl+Shift+S",
+            statusTip="Save File As...",
+            triggered=self.saveFileAs
+        )
 
         self.quitAction = QtGui.QAction(
-                            # QtGui.QIcon(':/images/save.png'),
-                            "&Quit",
-                            self,
-                            shortcut="Ctrl+Q",
-                            statusTip="Quit",
-                            triggered=self.close
-                        )
+            # QtGui.QIcon(':/images/save.png'),
+            "&Quit",
+            self,
+            shortcut="Ctrl+Q",
+            statusTip="Quit",
+            triggered=self.close
+        )
 
         # Build Menu --------------------------------------------------
 
@@ -154,8 +152,12 @@ class MainWindow(QtGui.QMainWindow):
         if not path:
             dialog = OpenDialog()
             dialog.set_folders_only(False)
-            path = dialog.getOpenFileName(self, "Open File",
-                    '', "ReStructuredText Files (*.rst *.txt)")
+            path = dialog.getOpenFileName(
+                self,
+                "Open File",
+                '',
+                "ReStructuredText Files (*.rst *.txt)"
+            )
 
         if path:
             file_path = Path(path[0])
@@ -172,11 +174,18 @@ class MainWindow(QtGui.QMainWindow):
                 f.close()
                 # self.rebuildHTML()
             except IOError:
-                QMessageBox.information(self, "Unable to open file: %s" % self.file_path.absolute())
+                QtGui.QMessageBox.information(
+                    self,
+                    "Unable to open file: %s" % self.file_path.absolute()
+                )
 
     def saveFileAs(self):
-        filename, _ = QtGui.QFileDialog.getSaveFileName(self, 'Save File As',
-                                '', "ReStructuredText Files (*.rst *.txt)")
+        filename, _ = QtGui.QFileDialog.getSaveFileName(
+            self,
+            'Save File As',
+            '',
+            "ReStructuredText Files (*.rst *.txt)"
+        )
         if filename:
             text = self.editor.toPlainText()
             try:
@@ -185,7 +194,10 @@ class MainWindow(QtGui.QMainWindow):
                 f.close()
                 # self.rebuildHTML()
             except IOError:
-                QMessageBox.information(self, "Unable to open file: %s" % filename)
+                QtGui.QMessageBox.information(
+                    self,
+                    "Unable to open file: %s" % filename
+                )
 
     def openFolder(self, path=None):
         """
@@ -232,11 +244,21 @@ class MainWindow(QtGui.QMainWindow):
 
         # TODO: make this configurable via a dialog
         os.chdir(self.file_path.parent)
-        proc = subprocess.Popen(["make", "clean"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc = subprocess.Popen(
+            ["make", "clean"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        )
         for line in proc.stdout:
             print("stdout: " + line.rstrip())
         print('----------------')
-        proc = subprocess.Popen(["make", "html"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc = subprocess.Popen(
+            ["make", "html"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        )
         proc.wait()
         for line in proc.stdout:
             print("stdout: " + line.rstrip())
@@ -252,7 +274,12 @@ class MainWindow(QtGui.QMainWindow):
         # TODO: get this working
         # TODO: make this configurable via a dialog
         os.chdir(self.file_path.parent)
-        proc = subprocess.Popen(["make", "latexpdf"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc = subprocess.Popen(
+            ["make", "latexpdf"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        )
         proc.wait()
         for line in proc.stdout:
             print("stdout: " + line.rstrip())
