@@ -2,3 +2,4 @@
 Unipath==1.0
 docutils==0.10
 PySide==1.1.2
+Sphinx==1.2b1
