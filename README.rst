@@ -4,7 +4,7 @@ sphinx-gui
 
 A desktop GUI for viewing and editing Sphinx docs in ReStructuredText.  Made with PySide (http://www.pyside.org).
 
-.. image:: sphinx-gui-screenshot.png
+.. image:: docs/sphinx-gui-screenshot.png
     :width: 60%
 
 Documentation
