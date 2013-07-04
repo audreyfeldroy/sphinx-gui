@@ -2,7 +2,7 @@
 sphinx-gui
 ============
 
-A desktop GUI for viewing and editing Sphinx docs in ReStructuredText.
+A desktop GUI for viewing and editing Sphinx docs in ReStructuredText.  Made with PySide (http://www.pyside.org).
 
 Documentation: http://sphinx-gui.rtfd.org
 
