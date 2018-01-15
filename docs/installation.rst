@@ -8,3 +8,4 @@ Until I get this onto PyPI, here are instructions:
 2. Clone this repo::
 
     $ git clone https://github.com/audreyr/sphinx-gui.git
+    $ pip install
